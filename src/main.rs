@@ -7,6 +7,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let assets_dir = &args[1];
+    println!("Assets dir: {}", assets_dir);
     run_day_1(assets_dir.to_owned());
 }
 
@@ -19,41 +20,72 @@ fn run_day_1(assets_dir: String) {
 
     println!("Reading file: {}", file_path);
 
-    let mut sum: u32 = 0;
+    let mut sum: i32 = 0;
 
     let lines = read_lines(file_path).unwrap();
 
     for line in lines {
-        let line = line.unwrap();
+        let line: String = line.unwrap();
 
-        let mut first_digit: char = 'a';
-        let mut last_digit: char = 'a';
+        let mut first_digit: i32 = -1;
+        let mut last_digit: i32 = -1;
 
-        for char in line.chars() {
+        // for char in line.chars() {
+        let mut chars = line.chars();
+        for i in 0..line.len() {
+            let char = chars.next().unwrap();
+
+            let current_digit;
+
             if char.is_digit(10) {
-                if !first_digit.is_digit(10) {
-                    first_digit = char;
+                // If digit we set the values
+                current_digit = char.to_string().parse().expect("Failed to parse the digit");
+            } else {
+                // If not digit we check if it's a spelled number starting at i
+                current_digit = is_numbers_spelled_with_letters(&line[i..]);
+            }
+
+            if current_digit > 0 {
+                if first_digit == -1 {
+                    first_digit = current_digit;
                 }
 
-                last_digit = char;
+                last_digit = current_digit;
             }
         }
 
-        if !first_digit.is_digit(10) || !last_digit.is_digit(10) {
-            eprintln!("Found line with no digits in challenge day 1 input");
-            std::process::exit(1);
-        }
-
-        let mut number_str: String = first_digit.to_string();
-        number_str.push(last_digit);
-
-        let number: u32 = number_str.parse().expect("Failed to parse a number");
-        // println!("Number: {}", number);
+        let number: i32 = (first_digit * 10) + last_digit;
 
         sum += number
     }
 
     println!("Result Day 1: {}", sum);
+}
+
+// If digit returns the corresponding number else returns zero
+fn is_numbers_spelled_with_letters(substr: &str) -> i32 {
+    let mut result: i32 = 0;
+
+    let numbers: Vec<(&str, i32)> = vec![
+        ("one", 1),
+        ("two", 2),
+        ("three", 3),
+        ("four", 4),
+        ("five", 5),
+        ("six", 6),
+        ("seven", 7),
+        ("eight", 8),
+        ("nine", 9),
+    ];
+
+    for (name, number) in numbers {
+        if substr.starts_with(name) {
+            result = number;
+            break;
+        }
+    }
+
+    return result;
 }
 
 // The output is wrapped in a Result to allow matching on errors
