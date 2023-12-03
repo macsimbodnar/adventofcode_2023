@@ -1,40 +1,21 @@
-use std::env;
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
-
 fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let assets_dir = &args[1];
-    println!("Assets dir: {}", assets_dir);
-    run_day_1(assets_dir.to_owned());
+    let input = include_str!("../../input.txt");
+    let sum = run_day_1_part_2(input.to_owned());
+    println!("Result Day 1 part 1: {}", sum);
 }
 
-fn run_day_1(assets_dir: String) {
-    println!("Computing day 1...");
-
-    const INPUT_DAY_1: &str = "/input_day_1.txt";
-
-    let file_path = assets_dir + INPUT_DAY_1;
-
-    println!("Reading file: {}", file_path);
-
+fn run_day_1_part_2(lines: String) -> i32 {
     let mut sum: i32 = 0;
 
-    let lines = read_lines(file_path).unwrap();
-
-    for line in lines {
-        let line: String = line.unwrap();
-
+    for line in lines.lines() {
         let mut first_digit: i32 = -1;
         let mut last_digit: i32 = -1;
 
-        // for char in line.chars() {
+        let line = line.trim();
         let mut chars = line.chars();
+
         for i in 0..line.len() {
             let char = chars.next().unwrap();
-
             let current_digit;
 
             if char.is_digit(10) {
@@ -59,7 +40,7 @@ fn run_day_1(assets_dir: String) {
         sum += number
     }
 
-    println!("Result Day 1: {}", sum);
+    return sum;
 }
 
 // If digit returns the corresponding number else returns zero
@@ -88,12 +69,31 @@ fn is_numbers_spelled_with_letters(substr: &str) -> i32 {
     return result;
 }
 
-// The output is wrapped in a Result to allow matching on errors
-// Returns an Iterator to the Reader of the lines of the file.
-fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(filename)?;
-    Ok(io::BufReader::new(file).lines())
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn day_1_test_input() {
+        let input = "two1nine
+        eightwothree
+        abcone2threexyz
+        xtwone3four
+        4nineeightseven2
+        zoneight234
+        7pqrstsixteen"
+            .to_string();
+
+        let result = run_day_1_part_2(input);
+
+        assert_eq!(result, 281);
+    }
+
+    #[test]
+    fn day_1_full_input() {
+        let input = include_str!("../../input.txt");
+        let result = run_day_1_part_2(input.to_string());
+
+        assert_eq!(result, 53868);
+    }
 }

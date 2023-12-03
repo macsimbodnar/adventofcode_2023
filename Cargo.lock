@@ -3,5 +3,13 @@
 version = 3
 
 [[package]]
-name = "adventofcode_2023"
+name = "day_1"
+version = "0.1.0"
+
+[[package]]
+name = "day_2"
+version = "0.1.0"
+
+[[package]]
+name = "day_3"
 version = "0.1.0"
