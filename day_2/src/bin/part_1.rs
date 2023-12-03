@@ -6,7 +6,7 @@ fn main() {
         green: 13,
         blue: 14,
     };
-    let sum = run_day_1_part_1(input.to_owned(), bag_load);
+    let sum = run_day_2_part_1(input.to_owned(), bag_load);
     println!("Result Day 2 part 1: {}", sum);
 }
 
@@ -17,7 +17,7 @@ struct CubesSet {
     blue: i32,
 }
 
-fn run_day_1_part_1(all_games: String, bag_load: CubesSet) -> i32 {
+fn run_day_2_part_1(all_games: String, bag_load: CubesSet) -> i32 {
     let mut sum = 0;
 
     'games_loop: for game in all_games.lines() {
@@ -83,7 +83,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn day_1_test_input() {
+    fn day_2_test_input() {
         let input = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
         Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
         Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
@@ -96,12 +96,12 @@ mod tests {
             blue: 14,
         };
 
-        let result = run_day_1_part_1(input.to_string(), bag_load);
+        let result = run_day_2_part_1(input.to_string(), bag_load);
         assert_eq!(result, 8);
     }
 
     #[test]
-    fn day_1_full_input() {
+    fn day_2_full_input() {
         let input = include_str!("../../input.txt");
 
         let bag_load = CubesSet {
@@ -109,7 +109,7 @@ mod tests {
             green: 13,
             blue: 14,
         };
-        let result = run_day_1_part_1(input.to_owned(), bag_load);
+        let result = run_day_2_part_1(input.to_owned(), bag_load);
         assert_eq!(result, 2369);
     }
 }
